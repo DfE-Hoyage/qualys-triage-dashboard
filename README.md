@@ -31,3 +31,4 @@ SEC-03	XSS & CSV Formula Injection Prevention	All dynamic CSV fields are auto-es
 SEC-04	Secrets Management	Flask SECRET_KEY and demo credentials are loaded via environment variables (.env excluded via .gitignore) rather than hardcoded in source control.
 
 ![Initial Kanban Board](docs/images/kanban_initial.jpeg)
+![Initial Kanban Board](docs/images/kanban_in_progress.jpeg)
