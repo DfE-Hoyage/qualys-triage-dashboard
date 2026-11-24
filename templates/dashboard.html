@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Qualys VMDR Triage Portal{% endblock %}
+
+{% block content %}
+  <section class="page-heading">
+    <div>
+      <p class="eyebrow">Security operations</p>
+      <h1>Vulnerability findings</h1>
+      <p class="muted">Review, filter, and prioritize findings across your environment.</p>
+    </div>
+  </section>
+
+  <section class="kpi-grid" aria-label="Vulnerability summary">
+    <article class="card kpi-card">
+      <span class="kpi-card__label">Total Findings</span>
+      <strong class="kpi-card__value">{{ kpis.total }}</strong>
+    </article>
+    <article class="card kpi-card kpi-card--critical">
+      <span class="kpi-card__label">Critical QDS</span>
+      <strong class="kpi-card__value">{{ kpis.critical }}</strong>
+    </article>
+    <article class="card kpi-card kpi-card--high">
+      <span class="kpi-card__label">High QDS</span>
+      <strong class="kpi-card__value">{{ kpis.high }}</strong>
+    </article>
+    <article class="card kpi-card kpi-card--active">
+      <span class="kpi-card__label">Active / Unpatched</span>
+      <strong class="kpi-card__value">{{ kpis.active_unpatched }}</strong>
+    </article>
+  </section>
+
+  <section class="card filter-card" aria-label="Filter vulnerability findings">
+    <form class="filter-form" method="GET" action="{{ url_for('frontend.dashboard') }}">
+      <div class="form-field filter-form__search">
+        <label for="q">Search</label>
+        <input id="q" name="q" type="search" value="{{ filters.q }}" placeholder="Search CVE, QID, Vulnerability, Host, IP...">
+      </div>
+      <div class="form-field">
+        <label for="qds_level">QDS Level</label>
+        <select id="qds_level" name="qds_level">
+          <option value="">All levels</option>
+          {% for level in options.qds_levels %}
+            <option value="{{ level }}" {% if level == filters.qds_level %}selected{% endif %}>{{ level }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="">All statuses</option>
+          {% for status in options.statuses %}
+            <option value="{{ status }}" {% if status == filters.status %}selected{% endif %}>{{ status }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="service_offering">Service Offering</label>
+        <select id="service_offering" name="service_offering">
+          <option value="">All services</option>
+          {% for offering in options.service_offerings %}
+            <option value="{{ offering }}" {% if offering == filters.service_offering %}selected{% endif %}>{{ offering }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="os">Operating System</label>
+        <select id="os" name="os">
+          <option value="">All operating systems</option>
+          {% for os_name in options.operating_systems %}
+            <option value="{{ os_name }}" {% if os_name == filters.os %}selected{% endif %}>{{ os_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="button button--primary" type="submit">Filter</button>
+        <a class="button button--secondary" href="{{ url_for('frontend.dashboard') }}">Reset</a>
+        <a class="button button--export" href="{{ url_for('frontend.export_csv', **request.args) }}">Export CSV</a>
+      </div>
+    </form>
+  </section>
+
+  <section class="card table-card" aria-labelledby="findings-title">
+    <div class="table-card__heading">
+      <div>
+        <h2 id="findings-title">Findings</h2>
+        <p class="muted"><strong>{{ vulnerabilities|length }}</strong> matching rows</p>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">QID</th>
+            <th scope="col">CVE ID</th>
+            <th scope="col">Vulnerability Name</th>
+            <th scope="col">QDS Level</th>
+            <th scope="col">ARS Level</th>
+            <th scope="col">Vuln Status</th>
+            <th scope="col">Service Offering</th>
+            <th scope="col">Server Name</th>
+            <th scope="col">Private IP</th>
+            <th scope="col"><span class="visually-hidden">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for v in vulnerabilities %}
+            <tr>
+              <td class="text-nowrap">{{ v['QID'] }}</td>
+              <td class="text-nowrap">{{ v['CVE ID'] }}</td>
+              <td class="vulnerability-name">{{ v['Vulnerability Name'] }}</td>
+              <td>
+                <span class="badge badge--{{ v['QDS Level']|lower }}">{{ v['QDS Level'] }}</span>
+                <span class="score">({{ v['QDS'] }})</span>
+              </td>
+              <td>{{ v['ARS Level'] }}</td>
+              <td><span class="status">{{ v['Vuln Status'] }}</span></td>
+              <td>{{ v['Service Offering'] }}</td>
+              <td class="text-nowrap">{{ v['Server Name'] }}</td>
+              <td class="text-nowrap">{{ v['Private IP'] }}</td>
+              <td><a class="table-link" href="{{ url_for('frontend.vulnerability_detail', vuln_id=v.id) }}">View</a></td>
+            </tr>
+          {% else %}
+            <tr>
+              <td class="empty-state" colspan="10">No vulnerability findings match these filters.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

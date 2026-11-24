@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Sign in | Qualys VMDR Triage Portal{% endblock %}
+
+{% block content %}
+  <section class="login-layout" aria-labelledby="login-title">
+    <div class="card login-card">
+      <div class="login-card__heading">
+        <p class="eyebrow">Vulnerability management</p>
+        <h1 id="login-title">Sign in</h1>
+        <p class="muted">Access the Qualys VMDR triage dashboard.</p>
+      </div>
+
+      {% if error %}
+        <div class="alert alert--error" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <form class="login-form" method="POST" action="{{ url_for('frontend.login') }}">
+        <div class="form-field">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="email" autocomplete="username" required>
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="button button--primary button--full" type="submit">Sign in</button>
+      </form>
+
+      <aside class="demo-credentials" aria-label="Demo credentials">
+        <h2>Demo Credentials</h2>
+        <p><strong>Username:</strong> <code>analyst@dfe.example.gov.uk</code></p>
+        <p><strong>Password:</strong> <code>QualysTriage2026!</code></p>
+      </aside>
+    </div>
+  </section>
+{% endblock %}

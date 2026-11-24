@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vuln['Vulnerability Name'] }} | Qualys VMDR Triage Portal{% endblock %}
+
+{% block content %}
+  <a class="back-link" href="{{ url_for('frontend.dashboard') }}">&larr; Back to findings</a>
+
+  <section class="detail-heading">
+    <div>
+      <p class="eyebrow">Vulnerability detail</p>
+      <h1>{{ vuln['Vulnerability Name'] }}</h1>
+      <div class="detail-heading__meta">
+        <span>{{ vuln['CVE ID'] }}</span>
+        <span>QID {{ vuln['QID'] }}</span>
+        <span class="badge badge--{{ vuln['QDS Level']|lower }}">{{ vuln['QDS Level'] }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-highlights" aria-label="Remediation information">
+    <article class="card highlight-card highlight-card--solution">
+      <h2>Solution</h2>
+      <p>{{ vuln['Solution'] }}</p>
+    </article>
+    <article class="card highlight-card highlight-card--results">
+      <h2>Results</h2>
+      <p>{{ vuln['Results'] }}</p>
+    </article>
+  </section>
+
+  <section class="card detail-card" aria-labelledby="attributes-title">
+    <div class="detail-card__heading">
+      <h2 id="attributes-title">Finding attributes</h2>
+    </div>
+    <dl class="detail-grid">
+      <div class="detail-item"><dt>Service Type</dt><dd>{{ vuln['Service Type'] }}</dd></div>
+      <div class="detail-item"><dt>Service Offering</dt><dd>{{ vuln['Service Offering'] }}</dd></div>
+      <div class="detail-item"><dt>Server Name</dt><dd>{{ vuln['Server Name'] }}</dd></div>
+      <div class="detail-item"><dt>FQDN</dt><dd>{{ vuln['FQDN'] }}</dd></div>
+      <div class="detail-item"><dt>DNS Name</dt><dd>{{ vuln['DNS Name'] }}</dd></div>
+      <div class="detail-item"><dt>Private IP</dt><dd>{{ vuln['Private IP'] }}</dd></div>
+      <div class="detail-item"><dt>Public IP</dt><dd>{{ vuln['Public IP'] }}</dd></div>
+      <div class="detail-item"><dt>PowerState</dt><dd>{{ vuln['PowerState'] }}</dd></div>
+      <div class="detail-item"><dt>OS</dt><dd>{{ vuln['OS'] }}</dd></div>
+      <div class="detail-item"><dt>Port</dt><dd>{{ vuln['Port'] }}</dd></div>
+      <div class="detail-item"><dt>Protocol</dt><dd>{{ vuln['Protocol'] }}</dd></div>
+      <div class="detail-item"><dt>SSL</dt><dd>{{ vuln['SSL'] }}</dd></div>
+      <div class="detail-item"><dt>QDS</dt><dd>{{ vuln['QDS'] }}</dd></div>
+      <div class="detail-item"><dt>ARS</dt><dd>{{ vuln['ARS'] }}</dd></div>
+      <div class="detail-item"><dt>ARS Level</dt><dd>{{ vuln['ARS Level'] }}</dd></div>
+      <div class="detail-item"><dt>Vuln Status</dt><dd>{{ vuln['Vuln Status'] }}</dd></div>
+      <div class="detail-item"><dt>Last Detected</dt><dd>{{ vuln['Last Detected'] }}</dd></div>
+      <div class="detail-item"><dt>Vendor Reference</dt><dd>{{ vuln['Vendor Reference'] }}</dd></div>
+      <div class="detail-item"><dt>Type</dt><dd>{{ vuln['Type'] }}</dd></div>
+      <div class="detail-item"><dt>Category</dt><dd>{{ vuln['Category'] }}</dd></div>
+    </dl>
+  </section>
+{% endblock %}
