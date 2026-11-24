@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Qualys VMDR Triage Portal{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="{{ url_for('frontend.dashboard') }}">Qualys VMDR Triage Portal</a>
+      {% if session.get('user') %}
+        <nav class="user-nav" aria-label="User navigation">
+          <span class="user-nav__email">{{ session.get('user') }}</span>
+          <a class="user-nav__logout" href="{{ url_for('frontend.logout') }}">Logout</a>
+        </nav>
+      {% endif %}
+    </div>
+  </header>
+  <main class="page-container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
