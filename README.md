@@ -1,3 +1,6 @@
+> **⚠️ ACADEMIC PROTOTYPE & SYNTHETIC DATA DISCLAIMER**  
+> This repository is a university Software Engineering coursework prototype and is **not** an official Department for Education (DfE) system. All vulnerability records, IP addresses (RFC 5737 documentation ranges), hostnames, and credentials in this project are **100% synthetic and fictional**, created solely for educational and demonstration purposes. No real organisational infrastructure or vulnerability data is included.
+
 # Qualys VMDR Triage Portal
 
 **Live Application URL:** [https://qualys-triage-dashboard.onrender.com](https://qualys-triage-dashboard.onrender.com)
