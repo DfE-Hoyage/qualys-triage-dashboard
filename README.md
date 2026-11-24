@@ -182,7 +182,7 @@ Development followed an incremental feature-branch workflow (`feat/SEC-01-qualys
 ## 9. User & Technical Documentation
 
 ### User Documentation
-1. **Sign In:** Navigate to [https://onrender.com](https://onrender.com) and enter the demo credentials (`analyst@dfe.example.gov.uk` / `QualysTriage2026!`).
+1. **Sign In:** Navigate to [https://qualys-triage-dashboard.onrender.com/](https://qualys-triage-dashboard.onrender.com/) and enter the demo credentials (`analyst@dfe.example.gov.uk` / `QualysTriage2026!`).
 2. **Review Executive KPIs:** The top summary bar displays total findings alongside Critical QDS, High QDS, and Active/Unpatched counts.
 3. **Search & Filter:** Enter keywords (e.g., `Log4j2`, `CVE-2024`, `SRV-WEB-01`) into the search box and combine dropdown filters (`QDS Level`, `Vuln Status`, `Service Offering`, `OS`), then click **Filter**. Click **Reset** to clear all filters.
 4. **Inspect Remediation Details:** Click **View** on any row to inspect the full 26-field asset profile, detection `Results`, and vendor `Solution`.
@@ -210,7 +210,7 @@ qualys-triage-dashboard/
 #### Local Setup & Running Tests
 ```bash
 # 1. Clone the repository
-git clone https://github.com
+git clone https://github.com/DfE-Hoyage/qualys-triage-dashboard
 cd qualys-triage-dashboard
 
 # 2. Create and activate a virtual environment
