@@ -40,3 +40,70 @@ def test_csv_ips_are_strictly_anonymised():
                     assert any(ip_obj in net for net in doc_nets), (
                         f"Non-anonymised IP in {col}: {ip_obj}"
                     )
+from services.vuln_service import (
+    load_vulnerabilities,
+    calculate_kpis,
+    filter_vulnerabilities,
+    get_filter_options,
+    get_vulnerability_by_id,
+)
+
+
+def test_load_vulnerabilities_returns_structured_records():
+    records = load_vulnerabilities(CSV_PATH)
+    assert len(records) == 120
+    first = records[0]
+    assert "id" in first
+    assert first["QID"] == "37667"
+    assert first["CVE ID"] == "CVE-2021-44228"
+    assert first["QDS Level"] == "Critical"
+    assert isinstance(first["QDS_num"], int)
+    assert isinstance(first["ARS_num"], int)
+
+
+def test_calculate_kpis_counts_severities_and_active():
+    records = load_vulnerabilities(CSV_PATH)
+    kpis = calculate_kpis(records)
+    assert kpis["total"] == 120
+    assert kpis["critical"] == 30
+    assert kpis["high"] == 30
+    assert kpis["medium"] == 30
+    assert kpis["low"] == 30
+    assert kpis["active_unpatched"] == 90  # New (30) + Active (30) + Re-Opened (30)
+
+
+def test_filter_vulnerabilities_by_keyword_and_criteria():
+    records = load_vulnerabilities(CSV_PATH)
+
+    # Keyword search across CVE / Name / Host
+    cve_matches = filter_vulnerabilities(records, query="CVE-2021-44228")
+    assert len(cve_matches) >= 1
+    assert all("CVE-2021-44228" in r["CVE ID"] for r in cve_matches)
+
+    # Multi-criteria filter (QDS Level + Vuln Status + Service Offering)
+    filtered = filter_vulnerabilities(
+        records,
+        qds_level="Critical",
+        status="New",
+        service_offering="Corporate Web",
+    )
+    assert len(filtered) > 0
+    assert all(
+        r["QDS Level"] == "Critical"
+        and r["Vuln Status"] == "New"
+        and r["Service Offering"] == "Corporate Web"
+        for r in filtered
+    )
+
+
+def test_get_filter_options_and_single_record_lookup():
+    records = load_vulnerabilities(CSV_PATH)
+    options = get_filter_options(records)
+    assert "Critical" in options["qds_levels"]
+    assert "Corporate Web" in options["service_offerings"]
+    assert "New" in options["statuses"]
+
+    item = get_vulnerability_by_id(records, 1)
+    assert item is not None
+    assert item["id"] == 1
+    assert get_vulnerability_by_id(records, 99999) is None
